@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../../Examples"
+		},
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "GitHub"
+	}
+}
