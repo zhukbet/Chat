@@ -70,7 +70,7 @@ if (local_color) {
 
 const input = document.querySelector(".inputMes")
 input.addEventListener("input", e => {
-
+    
     if (input.value.trim()) {
         document.querySelector(".button_input").innerHTML = `<button class="addtext">ADD</button>`;
         //!<button class="addtext" onclick="change_color_data()">ADD</button>`
@@ -85,13 +85,15 @@ input.addEventListener("input", e => {
            add.scrollTo(0, add.scrollHeight-10)
 
            localStorage.setItem("all_new_post",JSON.stringify(all_new_post))
+
+           input.value = ''
         })
     }
-
 
 })
 
 const paint_post = e => {
+    
 const isType = typeof(e) === 'string' 
     const local_ava = isType ? JSON.parse(localStorage.getItem('currentuser')) : e
     const local_color =JSON.parse(localStorage.getItem('color-body')) 
