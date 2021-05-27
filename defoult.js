@@ -1,0 +1,1 @@
+const getRandom=(min=10, max=99)=>Math.floor(min +  Math.random() * (max - min+1) )

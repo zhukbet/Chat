@@ -41,6 +41,7 @@ body {
     -moz-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;
+    overflow:hidden;
 }
 
 input,
@@ -121,8 +122,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4c4c4c', end
     width: 5.3%;
     min-width: 71.5px;
     overflow: scroll;
-
-    
+    height: 100vh;
 
 }
 .menu::-webkit-scrollbar {
@@ -172,7 +172,6 @@ min-height: 450px;
  .menu_footer img{
      width: 100%;
      height: 100%;
-     /* background: blue; */
  }
 
 .list{
@@ -180,8 +179,8 @@ min-height: 450px;
     min-width: 211.5px;
 background: -moz-linear-gradient(top,  #4c4c4c 0%, #595959 0%, #666666 1%, #666666 1%, #474747 18%, #1c1c1c 90%, #1c1c1c 90%, #111111 96%, #111111 99%, #2c2c2c 99%, #2c2c2c 100%, #000000 100%, #131313 100%); /* FF3.6-15 */
 background: -webkit-linear-gradient(top,  #4c4c4c 0%,#595959 0%,#666666 1%,#666666 1%,#474747 18%,#1c1c1c 90%,#1c1c1c 90%,#111111 96%,#111111 99%,#2c2c2c 99%,#2c2c2c 100%,#000000 100%,#131313 100%); /* Chrome10-25,Safari5.1-6 */
-background: linear-gradient(to bottom,  #4c4c4c 0%,#595959 0%,#666666 1%,#666666 1%,#474747 18%,#1c1c1c 90%,#1c1c1c 90%,#111111 96%,#111111 99%,#2c2c2c 99%,#2c2c2c 100%,#000000 100%,#131313 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4c4c4c', endColorstr='#131313',GradientType=0 ); /* IE6-9 */
+background: linear-gradient(to bottom,  #4c4c4c 0%,#595959 0%,#666666 1%,#666666 1%,#474747 18%,#1c1c1c 90%,#1c1c1c 90%,#111111 96%,#111111 99%,#2c2c2c 99%,#2c2c2c 100%,#000000 100%,#131313 100%); 
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4c4c4c', endColorstr='#131313',GradientType=0 ); 
 overflow-y: scroll;
 padding: 35px 25px;
 height: 100%;
@@ -191,10 +190,6 @@ height: 100%;
     width: 7px;
    
 }
-
-/* .list::-webkit-scrollbar-track {
-  box-shadow : 5px 5px 5px -5px red inset;
-} */
 
 .list::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, .2);
@@ -422,6 +417,7 @@ margin: 11vh  0 13vh 22px;
 padding-right:22px ;
 overflow-y: scroll;
 height: 76%;
+height: 76vh;
 
  
 }
@@ -441,6 +437,7 @@ height: 76%;
 }
 .conteiner_text{
     margin-left: 4%;
+
 }
 .conteiner_text_top{
     display: flex;
@@ -547,16 +544,14 @@ position: relative;
     bottom: 0;
     display: flex;
     padding: 0 9% 0 16%;
-    justify-content: space-evenly;
     height: 10vh;
 /* ggg */
-     justify-content: center;
+
+     justify-content: space-evenly;
     align-items: center;
     background-color: white;
-
-    
-   
 }
+
 .footer_right{
  position: absolute;
  display: flex;
@@ -565,13 +560,14 @@ position: relative;
 }
 .footer_right img:nth-child(1){
     margin-right: 18px;
-
+ 
 }
 .container_input {
     width: 100%;
     position: relative;
     display: flex;
     align-items: center;
+    justify-content: space-evenly;
     height: 100%;
 }
 .button_input{
@@ -601,9 +597,6 @@ position: relative;
 position: absolute;
 right: 20.5px;
 }
-
-
-
 
 
 
@@ -690,7 +683,7 @@ margin-top: 11px;
 /* for JS */
 .choice {
     position: absolute;
-    top: -250%;
+    top: -440%;
     right: 0;
     border:2px solid black;
     padding: 7px;
@@ -777,7 +770,43 @@ span.arrow{
     z-index: -1;
     opacity: 0;
 }
+
+.close_message{
+    position: absolute;
+    right: 2px;
+    top: 2px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    background: red;
+    height: 10px;
+    width: 10px;
+    border-radius: 10px;
+    display: flex;
+    font-size: 8px;
+    cursor: pointer;
+ 
+    transform: rotate(90deg);
+    color: white;
+
+    opacity: 0;
+    z-index: -2;
+    
+}
+.close_message.open{
+opacity: 1;
+z-index: 2;
+}
+
+
+
 @media screen and (max-width:800px) {
+    .menu {
+height: 100vh;
+/* ggg */
+    }
     body{
        background: grey;
     }
@@ -832,9 +861,7 @@ span.arrow{
         width: 50%;
     }
     .container_input_top input {
-        width: 100%;
-       
-        
+        width: 100%;;
          
     }
 
@@ -849,19 +876,16 @@ span.arrow{
         margin-left: -35px;
         
     }
-    /* .main_footer{
-        background: red;
-        display: flex;
-        justify-content: center;
-    } */
+
 
     .button_input{
         right: 15%;
+        
     }
     .main_footer input{
         font-size: 15px;
-        width: 80%;
-
+        width: 70%;
+    
     }
 
 }
@@ -870,4 +894,14 @@ span.arrow{
 .select_content img{
  
     display: block;
+}
+.voice.red {
+    background-color: red;
+}
+.container_vo {
+    position: fixed;
+    width: 100px;
+    height: 30px;
+    background-color: red;
+
 }

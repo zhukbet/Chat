@@ -1,71 +1,13 @@
-const users = [
-    {
-        ava: './img/3page/Jehua.png',
-        _id: 'xqwdq23e',
-        name: 'Jehua Stout'
-    },
-    {
-        ava: "./img/3page/Ada.png",
-        _id: 'asd32da',
-        name: "Aada Laine"
-        
-    },
-    {
-        ava: "./img/3page/NalaHestler.png",
-        _id: '12fdf54s',
-        name: "Nala Hester"
-    }
-]
-let all_new_post = []
-const choose = document.querySelector(".select")
-const selectImg = document.querySelector(".select_content img")
-const local_ava = localStorage.getItem('currentuser')
+
+let all_new_post = [];
+let new_container_id = []
+
 const add = document.querySelector(".main_global_chat")
 
 
 
 
-if (local_ava) {
-    selectImg.src = JSON.parse(local_ava).ava
 
-} else {
-    localStorage.setItem('currentuser',JSON.stringify(users[2]) )
-   
-}
-const settings = document.querySelector(".main_top_lastEle")
-const color = document.querySelector("#color")
-
-
-let isOpen_body = false
-const fun_show = () => {
-    isOpen_body = false
-    setTimeout(() => isOpen_body = true, 200)
-
-}
-settings.addEventListener("click", e => {
-    document.querySelector('.choice').classList.toggle("active")
-    fun_show()
-})
-const change_collor_data = color => {
-
-    for (const dataColor of document.querySelectorAll(".content_date")) {
-        dataColor.style.background = color
-    }
-}
-
-color.addEventListener("input", e => {
-    change_collor_data(e.target.value);
-    document.body.style.background = e.target.value
-    localStorage.setItem("color-body", JSON.stringify(e.target.value))
-})
-
-const local_color = localStorage.getItem('color-body')
-if (local_color) {
-    document.body.style.background =
-        JSON.parse(local_color)
-    change_collor_data(JSON.parse(local_color))
-}
-// console.log(navigator.mediaDevices.getUserMedia({audio:true}));
 
 
 const input = document.querySelector(".inputMes")
@@ -74,48 +16,73 @@ input.addEventListener("input", e => {
     if (input.value.trim()) {
         document.querySelector(".button_input").innerHTML = `<button class="addtext">ADD</button>`;
         //!<button class="addtext" onclick="change_color_data()">ADD</button>`
-
+        
         document.querySelector('.addtext').addEventListener("click", b => {
        
-          
-        paint_post(e.target.value)
-        const local_ava =  JSON.parse(localStorage.getItem('currentuser'))
-            all_new_post.push(new_post(local_ava.ava,e.target.value,local_ava.name))
+            const id = 'id_'+getRandom()+getRandom()+getRandom()
+            paint_post(e.target.value, id)
+            console.log(id);
+            const local_ava =  JSON.parse(localStorage.getItem('currentuser'));
+            
+            all_new_post.push(new_post(local_ava.ava,e.target.value,local_ava.name,id,null ))
    
-           add.scrollTo(0, add.scrollHeight-10)
-
+            add.scrollTo(0, add.scrollHeight-10)
+            
            localStorage.setItem("all_new_post",JSON.stringify(all_new_post))
-
+           
            input.value = ''
-        })
+           
+        b.target.remove()
+    })
+    
+} else {
+        document.querySelector(".button_input").innerHTML = ``;
     }
 
 })
+const paint_post = (e,_id) => {
+  e.audio &&  console.log(e);
 
-const paint_post = e => {
     
-const isType = typeof(e) === 'string' 
+    const isType = typeof(e) === 'string' 
     const local_ava = isType ? JSON.parse(localStorage.getItem('currentuser')) : e
     const local_color =JSON.parse(localStorage.getItem('color-body')) 
-console.log(e);
 const value = isType ? e : e.value
-    
-    add.innerHTML += ` <div class="conteiner_content_message">
-<img src="${local_ava.ava}"> 
-<div class="conteiner_text">
-  <div class="conteiner_text_top">
-    <h2 class="name">${local_ava.name}</h2>
-    <p class="time"> ${new Date().toLocaleString()}PM</p>
-    </div>
-${value.includes('@')
-? ` <p class="conteiner_text_blue">${value}</p> `
-            : `<p>${value}</p>`
+const id = _id? _id:local_ava._id  
 
-        }
-<p></p>
-<div>
+
+
+
+add.innerHTML += ` <div 
+    id="${id}"
+    class="conteiner_content_message">
+    <div class="close_message">X</div>
+    <img src="${local_ava.ava}"> 
+<div class="conteiner_text">
+<div class="conteiner_text_top">
+    <h2 class="name">${local_ava.name}</h2>
+    <p class="time"> ${isType
+        ?new Date().toLocaleString()
+        :e.date
+    }PM</p>
+    </div>
+    
+
+
+    
+    ${e.audio
+
+?`<audio src="${URL.createObjectURL(e.audio)}" controls></audio>`
+:value.includes('@')
+? ` <p class="conteiner_text_blue">${value}</p> `
+: `<p>${value}</p>`
+}
+
+
+
+
 </div>
-</div>
+
 <div class="content_container_center_date">
 <div class="content_date">
 ${isType
@@ -127,11 +94,37 @@ ${isType
 
 </div>`
     change_collor_data(local_color)
+    new_container_id.push(id)
+    
+    
+    
+add_new_function_for_id()
+}
+const add_new_function_for_id = ()=>{
+    for(const newid of new_container_id){
+        
+        
+            document.querySelector('#'+newid).addEventListener("dblclick",e=>{
+                
+                document.querySelector(`#${newid} .close_message`).classList.toggle("open")
+
+                document.querySelector(`#${newid} .close_message`).addEventListener("click", e=>{
+                    
+                all_new_post = all_new_post.filter(e=>e._id !== newid)
+                
+                localStorage.setItem("all_new_post",JSON.stringify(all_new_post))
+                document.querySelector('#'+newid).remove()
+                
+            })
+        }
+        );
+    }
 }
 
 
 
-const new_post = (ava, value, name)=>({ava,value,name,date: new Date().toLocaleString()})
+
+const new_post = (ava, value, name, _id,audio)=>({ava,value,name,date: new Date().toLocaleString(),_id, audio})
 
 
 
@@ -139,91 +132,63 @@ const new_post = (ava, value, name)=>({ava,value,name,date: new Date().toLocaleS
 
 if(JSON.parse(localStorage.getItem('all_new_post'))){
 
-const all_post=JSON.parse(localStorage.getItem('all_new_post'))
-all_new_post = [...all_post]
-all_new_post.map(item=> {
+    const all_post=JSON.parse(localStorage.getItem('all_new_post'))
+    all_new_post = [...all_post]
+
+ all_new_post.map(item=> {
    
-    paint_post(item)
-})
+paint_post(item) })
 }
-
-const choseOpen = document.querySelector('.content_ava_user')
-
-setTimeout(() => choseOpen.style.transition = 'all .3s', 200)
-
-const op_or_clo = () => {
-    fun_show()
-    choseOpen.classList.toggle("choose_open")
-    document.querySelector('.select span').classList.toggle("arrow")
-
-
-}
-choose.addEventListener("click", op_or_clo)
-
-
-choseOpen.addEventListener("click", e => {
-
-
-    users.find((item => {
-
-        if (e.target.closest("button")?.value == item._id) {
-            selectImg.src = item.ava;
-
-            //   записываем в localstorage обжект
-            localStorage.setItem('currentuser', JSON.stringify(item))
-            op_or_clo()
-            document.querySelector('.choice').classList.toggle("active")
-
-        }
-    }))
-})
-document.body.addEventListener("click", e => {
-
-    if (isOpen_body) {
-        document.querySelector('.choice').classList.remove("active")
-        choseOpen.classList.add("choose_open")
-    }
-
-    isOpen_body = false
-})
-
 
 
 
 const container_input = document.querySelector('.container_input')
 
 
+const voice=document.querySelector(".voice")
 
-const smile = [
-    {
-        smi: `&#128512`,
-        _id: `dsdlslsm21`
-    },
-    {
-        smi: `&#128515`,
-        _id: `cxmxm,1`
-    },
-    {
-        smi: `&#128516`,
-        _id: `dopspd`
-    },
-    {
-        smi: `&#128517`,
-        _id: `zmz,x,`
-    },
-    {
-        smi: `&#129315`,
-        _id: `cmmcz1`
-    },
-]
 
-const smiles = document.querySelector(".footer_left img")
 
-smiles.addEventListener("click", e => {
-    console.log(e)
-    smile.find((item => {
+voice.addEventListener("mousedown", e=>{
+    const audioArr=[]
+    
+  navigator.mediaDevices.getUserMedia({audio:true})
+  .then(audio=>{
+      const newAudio=new MediaRecorder(audio)
+      newAudio.start()
+      
+   newAudio.addEventListener("dataavailable",e=>{
+       audioArr.push(e.data)
+    })
+    newAudio.addEventListener("stop",e=>{
+  const convertation=new Blob(audioArr,{type:"audio/wav"})
+      const id = 'id_'+getRandom()+getRandom()+getRandom()
+      const local_ava =  JSON.parse(localStorage.getItem('currentuser'));
+      const post = new_post(local_ava.ava,null,local_ava.name,id,convertation )
+      all_new_post.push(post)
 
-        // if(e.target.closest("smile")?.smi==item._id){
+      paint_post(post)
 
-    }))
+      //! AudioBuffer
+    //   const audiocont = new AudioContext()
+    //   console.log(
+    //      audiocont
+    //   );
+    //   localStorage.setItem("a",JSON.stringify(audioArr))
+    // //   localStorage.setItem("all_new_post",JSON.stringify(all_new_post))
+    })
+    
+    voice.addEventListener("mouseup", e=>{
+        newAudio.stop()
+
+    })
 })
+
+
+})
+
+
+
+
+
+
